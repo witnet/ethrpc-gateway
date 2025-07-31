@@ -11,13 +11,9 @@ The ETH/RPC Gateway launcher CLI allows you to:
 - 🚀 Launch a local JSON-RPC proxy or relay to a remote ETH/RPC provider.
 - 🌐 Target multiple EVM-compatible L1 & L2 networks (Ethereum, Polygon, Arbitrum, etc.).
 - ⚙️ Use preconfigured endpoints or provide your own.
-- 📊 Inspect basic chain info directly from the terminal
+- 📊 Inspect basic chain info directly from the terminal.
 - ✍️ **Sign transactions** with private keys from your local environment.
-- 🔄 Support for ecosystems where RPC providers do not fully implement the standard Ethereum JSON-RPC protocol, such as: 
-  - **Conflux**
-  - **Reef**
-  - **zkSync**
-  - **TEN**
+- 🔄 Support for ecosystems where RPC providers do not fully implement the standard Ethereum JSON-RPC protocol (such as *Conflux, Reef, TEN, zkSync*).
 
 This makes the gateway a flexible and pretty convenient tool, even for non-standard Ethereum-compatible chains and environments.
 
@@ -34,33 +30,39 @@ yarn global add ethrpc-gateway
 
 ## 🛠️ Usage
 
+- General usage:
 ```bash
 ethrpc [<ECOSYSTEM>[:<NETWORK>] [<PORT> [<REMOTE_PROVIDER_URL]]
 ```
 
 ### Listing supported networks:
-List supported EVM-compatible ecosystems:
+
+- List supported EVM-compatible ecosystems:
 ```bash
 ethrpc
 ```
-List supported networks within the specified ecosystem (e.g. Polygon):
+
+- List supported networks within the specified ecosystem (e.g. Polygon):
 ```bash
 ethrpc polygon
 ```
 
 ### Launching a read-only gateway:
-Launch a gateway with the specified network and port (e.g. Ethereum Sepolia):
+
+- Launch a gateway with the specified network and port (e.g. Ethereum Sepolia):
 ```bash
 ethrpc ethereum:sepolia 7777
 ```
 
 ### Launching a gateway with signing capability:
-Launch a gateway with the specified network and private keys (e.g. Conflux Core Testnet):
+
+- Launch a gateway with the specified network and private keys (e.g. Conflux Core Testnet):
 ```bash
 export ETHRPC_PRIVATE_KEYS=["your_private_key_1", ..., "your_private_key_n", ]
 ethrpc conflux:core:testnet
 ```
-Launch a gateway with the specified network and remote provider (e.g. Ethereum Mainnet):
+
+- Launch a gateway with the specified network and remote provider (e.g. Ethereum Mainnet):
 ```bash
 export ETHRPC_SEED_PHRASE="your seed phrase here"
 export ETHRPC_PROVIDER_URL=https://https://mainnet.infura.io/v3/you_infura_key_here
@@ -149,9 +151,10 @@ ethrpc ethereum:mainnet
 - @reef-defi/evm-provider
 
 🔒 Security Notice
-This tool does read private keys from system environment variables only. It does not read nor store them on disk. Private keys are used only in memory to sign transactions. You must set either the ETHRPC_PRIVATE_KEYS or the ETHRPC_SEED_PHRASE environment variables, or provide your private key via a secure method during development.
 
-Warning: Never expose private keys in production environments. This tool is meant for development or testing use.
+- This tool does read private keys from system environment variables, but not doest it read nor store them on disk. Private keys are used only in memory to sign transactions. You must set either the ETHRPC_PRIVATE_KEYS or the ETHRPC_SEED_PHRASE environment variables, or provide your private keys via a secure method during development.
+
+> ***Warning**: Never expose private keys in production environments. This tool is meant for development or testing use.*
 
 📜 License
 MIT © 2025 — Maintained by the [Witnet Project](https://github.com/witnet).
