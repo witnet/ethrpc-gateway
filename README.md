@@ -1,170 +1,160 @@
-# web3-jsonrpc-gateway
+# ETH/RPC Gateway launcher CLI
 
-A Web3 JSON-RPC provider gateway that handles accounts on its own using Ethers.js, or other SDKs, but delegates chain queries to a 3rd party "destination provider", e.g. Infura, Cloudflare, Conflux, BOBA-L2, etc.
+A command-line tool to launch RPC gateways for Ethereum-compatible chains using preconfigured or custom ETH/RPC endopoints, with support for both **read-only** interactions and **transaction signing** using private keys set up locally on the user's development environment.
 
-## Compilation
+This utility provides a quick and consistent way to interact with multiple EVM networks from the command line, ideal for scripting, diagnostics, network health checks, and automated transactions.
 
-```console
-yarn build
+## 🧭 Overview
+
+The ETH/RPC Gateway launcher CLI allows you to:
+
+- 🚀 Launch a local JSON-RPC proxy or relay to a remote ETH/RPC provider.
+- 🌐 Target multiple EVM-compatible L1 & L2 networks (Ethereum, Polygon, Arbitrum, etc.).
+- ⚙️ Use preconfigured endpoints or provide your own.
+- 📊 Inspect basic chain info directly from the terminal
+- ✍️ **Sign transactions** with private keys from your local environment.
+- 🔄 Support for ecosystems where RPC providers do not fully implement the standard Ethereum JSON-RPC protocol, such as: 
+  - **Conflux**
+  - **Reef**
+  - **zkSync**
+  - **TEN**
+
+This makes the gateway a flexible and pretty convenient tool, even for non-standard Ethereum-compatible chains and environments.
+
+## 📦 Installation
+
+```bash
+npm install -g ethrpc-gateway
 ```
 
-## Release
-
-This repository is released automatically in [DockerHub](https://github.com/witnet/web3-jsonrpc-gateway/blob/main/.github/workflows/docker-publish.yml) and [npm](https://github.com/witnet/web3-jsonrpc-gateway/blob/main/.github/workflows/npm-publish.yml) using GitHub actions when a new release is detected in the repository. To release:
-
-- Push a new tag.
-- [Publish](https://github.com/witnet/web3-jsonrpc-gateway/releases/new) a new release.
-
-## Running a single server instance, depending on destination provider type:
-
-### Infura as destination provider:
-
-```console
-node dist/bin/ethers/infura
+or using `yarn`:
+```bash
+yarn global add ethrpc-gateway
 ```
 
-Required environment variables:
+## 🛠️ Usage
 
-- `ETHRPC_PORT`: listening port for the server. Can also be passed from command-line as first parameter.
-- `ETHRPC_NETWORK`: network name. Infura supports: `mainnet`, `ropsten`, `rinkeby`, `kovan` and `goerli`.
-- `ETHRPC_SEED_PHRASE`: the seed phrase to use for the server's own wrapped wallet, in BIP-39 mnemonics format.
-- `ETHRPC_PROVIDER_KEY`: your Infura project ID.
-
-Optional environment variables:
-
-- `ETHRPC_CALL_INTERLEAVE_BLOCKS`: number of blocks before latest knwon upon which EVM read-only calls will be bound to; this variable defaults to zero.
-- `ETHRPC_INFURA_GAS_LIMIT`: default gas limit, if not specified by the client; or maximum gas limit threshold if either estimated by the provider, or provided by the client.
-- `ETHRPC_INFURA_GAS_PRICE`: default gas price, if not specified by the client; or maximum gas price threshold if either estimated by the provider, or provided by the client.
-- `ETHRPC_INFURA_GAS_PRICE_FACTOR`: multiplier applied to gas prices estimated by provider.
-- `ETHRPC_LOG_LEVEL`: max log level to be traced, can be any of the following: `error`, `warn`, `info`, `http`, `verbose`, `debug`, `silly`. If not specified, `verbose` will apply.
-- `ETHRPC_SEED_PHRASE_WALLETS`: number of wallet addresses to be handled by the gateway, derived from path '`m/44'/60'/0'/0/*`'.
-
-### Conflux Core compatible destination providers:
-
-```console
-node ./dist/bin/conflux
+```bash
+ethrpc [<ECOSYSTEM>[:<NETWORK>] [<PORT> [<REMOTE_PROVIDER_URL]]
 ```
 
-Required environment variables:
-
-- `ETHRPC_PROVIDER_URL`: actual URL of the Web3 JSON-RPC provider. Can also be passed from command-line as a first parameter.
-- `ETHRPC_PORT`: listening port for the server. Can also be passed from command-line as a second parameter.
-- `ETHRPC_NETWORK`: network id. Conflux providers currently supports: `1` for testnet, and `1029` for mainnet.
-- `ETHRPC_PRIVATE_KEYS`: array of private keys to be used for signing transactions.
-
-Optional environment variables:
-
-- `ETHRPC_CONFLUX_DEFAULT_EPOCH_LABEL`: default epoch label to be used on read-only RPC calls, if none is specified by the caller; this variable will default to `"latest_finalized"` if none is set.
-- `ETHRPC_CONFLUX_ESTIMATE_GAS_PRICE`: if set to `true`, the provider will be asked to estimate the gas price, before signing the transaction; if the provider-estimated gas price is greater than `ETHRPC_CONFLUX_GAS_PRICE`, the transaction will be rejected by the gateway.
-- `ETHRPC_CONFLUX_GAS_LIMIT`: default gas limit to be used before signing a transaction, if not specified by the caller.
-- `ETHRPC_CONFLUX_GAS_PRICE`: default gas price to be used before signing a transaction, if not specified by the caller.
-- `ETHRPC_CALL_INTERLEAVE_BLOCKS`: number of epochs before current epoch number upon which EVM read-only calls will be bound to; this variable defaults to zero.
-- `ETHRPC_LOG_LEVEL`: max log level to be traced, can be any of the following: `error`, `warn`, `info`, `http`, `verbose`, `debug`, `silly`. If not specified, `verbose` will apply.
-
-### Reef-compatible destination providers:
-
-```console
-node ./dist/bin/reef
+### Listing supported networks:
+List supported EVM-compatible ecosystems:
+```bash
+ethrpc
+```
+List supported networks within the specified ecosystem (e.g. Polygon):
+```bash
+ethrpc polygon
 ```
 
-Required environment variables:
-
-- `ETHRPC_PROVIDER_URL`: actual URL of the Web3 JSON-RPC provider. Can also be passed from command-line as a first parameter.
-- `REEF_GRAPHQL_URL`: the GraphQL endpoint serving EVM's data. Can also be passed from command-line as a second parameter.
-- `ETHRPC_PORT`: listening port for the server. Can also be passed from command-line as a third parameter.
-- `ETHRPC_SEED_PHRASE`: seed phrase to be used with either `Infura` or `Ethers.js` providers.
-
-Optional environment variables:
-
-- `ETHRPC_LOG_LEVEL`: max log level to be traced, can be any of the following: `error`, `warn`, `info`, `http`, `verbose`, `debug`, `silly`. If not specified, `verbose` will apply.
-- `ETHRPC_SEED_PHRASE_WALLETS`: number of EVM wallet addresses to be handled by the gateway. EVM addresses will be default ones attached to respective Reef addresses. First Reef address will be derived from '`${ETHRPC_SEED_PHRASE}`', while the following one from '`${ETHRPC_SEED_PHRASE}//${j}`' (with `j > 0`).
-
-### Generic destination providers:
-
-```console
-node ./dist/bin/ethers
+### Launching a read-only gateway:
+Launch a gateway with the specified network and port (e.g. Ethereum Sepolia):
+```bash
+ethrpc ethereum:sepolia 7777
 ```
 
-Generic destination providers need to comply with the `JsonRpcProvider` type from the `Ethers.js` library:
+### Launching a gateway with signing capability:
+Launch a gateway with the specified network and private keys (e.g. Conflux Core Testnet):
+```bash
+export ETHRPC_PRIVATE_KEYS=["your_private_key_1", ..., "your_private_key_n", ]
+ethrpc conflux:core:testnet
+```
+Launch a gateway with the specified network and remote provider (e.g. Ethereum Mainnet):
+```bash
+export ETHRPC_SEED_PHRASE="your seed phrase here"
+export ETHRPC_PROVIDER_URL=https://https://mainnet.infura.io/v3/you_infura_key_here
+ethrpc ethereum:mainnet
+```
 
-- [jsonrpcprovider](https://github.com/ethers-io/ethers.js/blob/d395d16fa357ec5dda9b59922cf21c39dc34c071/packages/providers/src.ts/json-rpc-provider.ts#L279-L612)
-- [Ethers.js](https://github.com/ethers-io/ethers.js)
+## 🌍 Supported Chains
+### Testnets
+| Ecosystem | Network Name           | Default Port | Chain Id |
+| :-------- | :--------------------- | :----------: | -------: |
+| Arbitrum  | arbitrum:sepolia       | 8517 | 421614
+| Avalance  | avalanche:testnet      | 8533 | 43113
+| BASE      | base:sepolia           | 8502 | 84532
+| BOBA      | boba:bnb:testnet       | 8510 | 9728
+|           | boba:eth:goerli        | 8515 | 2888
+| CELO      | celo:alfajores         | 8538 | 44787
+| Conflux   | conflux:core:testnet   | 8540 | 1
+|           | conflux:espace:testnet | 8529 | 71
+| Cronos    | cronos:testnet         | 8530 | 338
+| Dogechain | dogechain:testnet      | 8519 | 568
+| Elastos   | elastos:testnet        | 8513 | 21
+| Ethereum  | ethereum:sepolia       | 8506 | 11155111
+| Fuse      | fuse:testnet           | 8511 | 123
+| Gnosis    | gnosis:testnet         | 8509 | 10200
+| KAVA      | kava:testnet           | 8526 | 2221
+| KCC       | kcc:testnet            | 8537 | 322
+| KAIA      | kaia:testnet           | 8527 | 1001
+| Mantle    | mantle:sepolia         | 8508 | 5003
+| Meter     | meter:testnet          | 8523 | 83
+| Metis     | metis:sepolia          | 8536 | 59902
+| Moonbeam  | moonbeam:moonbase      | 8531 | 1287
+|           | moonbeam:moonriver     | 7531 | 1285
+| OKC       | okx:oktchain:testnet   | 8528 | 65
+|           | okx:xlayer:sepolia     | 8505 | 195
+| Optimism  | optimism:sepolia       | 8503 | 11155420
+| Polygon   | polygon:amoy           | 8535 | 80002
+|           | polygon:zkevm:testnet  | 8512 | 1442
+| Reef      | reef:testnet           | 8532 | 13939
+| Scroll    | scroll:sepolia         | 8514 | 534351
+| Syscoin   | syscoin:testnet        | 8521 | 5700
+|           | syscoin:rollux:testnet | 8507 | 57000
+| TEN       | ten:testnet            | 8504 | 443
+| Ultron    | ultron:testnet         | 8516 | 1230
+| Unichain  | unichain:sepolia       | 8500 | 1301
+| World     | worldchain:sepolia     | 8501 | 4801
+| ZkSync    | zksync:sepolia         | 8499 | 300
 
-Required environment variables:
+### Mainnets
+| Ecosystem | Network Name           | Default Port | Chain Id |
+| :-------- | :--------------------- | :----------: | -------: |
+| Arbitrum  | arbitrum:mainnet       | 9517 | 42161
+| Avalance  | avalanche:mainnet      | 9533 | 43114
+| BASE      | base:mainnet           | 9502 | 8453
+| BOBA      | boba:bnb:mainnet       | 9510 | 56288
+|           | boba:eth:mainnet       | 9539 | 288
+| CELO      | celo:mainnet           | 9538 | 42220
+| Conflux   | conflux:core:mainnet   | 9540 | 1029
+|           | conflux:espace:mainnet | 9529 | 1030
+| Cronos    | cronos:mainnet         | 9530 | 25
+| Dogechain | dogechain:mainnet      | 9519 | 2000
+| Elastos   | elastos:mainnet        | 9513 | 20
+| Ethereum  | ethereum:mainnet       | 9545 | 1
+| Gnosis    | gnosis:mainnet         | 9509 | 100
+| KAVA      | kava:mainnet           | 9526 | 2222
+| KCC       | kcc:mainnet            | 9537 | 321
+| KAIA      | kaia:mainnet           | 9527 | 8217
+| Mantle    | mantle:mainnet         | 9508 | 5000
+| Meter     | meter:mainnet          | 9523 | 82
+| Metis     | metis:sepolia          | 7536 | 1088
+| Moonbeam  | moonbeam:mainnet       | 9531 | 1284
+| Optimism  | optimism:mainnet       | 9520 | 10
+| Polygon   | polygon:mainnet        | 9535 | 137
+|           | polygon:zkevm:mainnet  | 9512 | 1101
+| Reef      | reef:mainnet           | 9532 | 13939
+| Scroll    | scroll:mainnet         | 9514 | 534352
+| Syscoin   | syscoin:testnet        | 9521 | 57
+| Ultron    | ultron:mainnet         | 9516 | 1231
+| World     | worldchain:mainnet     | 9501 | 480
 
-- `ETHRPC_PORT`: listening port for the server. Can also be passed from command-line as a second parameter.
-- `ETHRPC_SEED_PHRASE`: the seed phrase to use for the server's own wrapped wallet, in BIP-39 mnemonics format.
-- `ETHRPC_PROVIDER_URL`: actual URL of the Web3 JSON-RPC provider. Can also be passed from command-line as a first parameter.
+🧱 Built With
+- Node.js
+- Axios
+- Ethers v5
+- js-conflux-sdk
+- zksync-ethers
+- @reef-defi/evm-provider
 
-Optional environment variables:
+🔒 Security Notice
+This tool does read private keys from system environment variables only. It does not read nor store them on disk. Private keys are used only in memory to sign transactions. You must set either the ETHRPC_PRIVATE_KEYS or the ETHRPC_SEED_PHRASE environment variables, or provide your private key via a secure method during development.
 
-- `ETHRPC_NETWORK`: the network name to connect with.
-- `ETHRPC_SEED_PHRASE_WALLETS`: number of wallet addresses to be handled by the gateway, derived from path '`m/44'/60'/0'/0/*`'.
-- `ETHRPC_LOG_LEVEL`: max log level to be traced, can be any of the following: `error`, `warn`, `info`, `http`, `verbose`, `debug`, `silly`. If not specified, `verbose` will apply.
-- `ETHRPC_ETHERS_ALWAYS_SYNCED`: if set to `true`, the gateway will intercept calls to `eth_syncing` as to return `false` in all cases.
-- `ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT`: if set to `true`, the provider will be asked to estimate the gas limit, before signing the transaction; if the provider-estimated gas limit is greater than `ETHRPC_ETHERS_GAS_LIMIT`, the transaction will be rejected by the gateway.
-- `ETHRPC_ETHERS_ESTIMATE_GAS_PRICE`: if set to `true`, the provider will be asked to estimate the gas price, before signing the transaction; if the provider-estimated gas price is greater than `ETHRPC_ETHERS_GAS_PRICE`, the transaction will be rejected by the gateway.
-- `ETHRPC_ETHERS_GAS_LIMIT`: default gas limit, if not specified by the client; or maximum gas limit threshold if either estimated by the provider, or provided by the client.
-- `ETHRPC_ETHERS_GAS_PRICE`: default gas price, if not specified by the client; or maximum gas price threshold if either estimated by the provider, or provided by the client.
-- `ETHRPC_ETHERS_GAS_PRICE_FACTOR`: multiplier applied to estimated gas price, if `ETHRPC_ETHERS_ESTIMATE_GAS_PRICE` is `true`.
-- `ETHRPC_ETHERS_MOCK_FILTERS`: makes `eth_getFilterChanges` to always return latest known block.
-- `ETHRPC_CALL_INTERLEAVE_BLOCKS`: number of blocks before latest knwon upon which EVM read-only calls will be bound to; this variable defaults to zero.
+Warning: Never expose private keys in production environments. This tool is meant for development or testing use.
 
-## Pre-configured JSON-RPC provider gateways:
+📜 License
+MIT © 2025 — Maintained by the [Witnet Project](https://github.com/witnet).
 
-There are several package scripts at your disposal for you to launch specific gateways to multiple WEB3-compatible blockchains, and different possible networks within them.
-
-**Important**: In order to these batch scripts to work properly, please rename `.env_batch_example` to `.env`, and fulfill the following parameters:
-
-- `ETHRPC_CALL_INTERLEAVE_BLOCKS`: number of blocks before latest knwon upon which EVM read-only calls will be bound to; this variable defaults to zero.
-- `ETHRPC_PROVIDER_KEY`: your Infura's project id to be used with `Infura`-connected servers.
-- `ETHRPC_LOG_LEVEL`: max log level to be traced, can be any of the following: `error`, `warn`, `info`, `http`, `verbose`, `debug`, `silly`. If not specified, `verbose` will apply.
-- `ETHRPC_PRIVATE_KEYS`: array of private keys to be used by `Conflux` and `Celo` -alike providers.
-- `ETHRPC_SEED_PHRASE`: seed phrase to be used with either `Infura` or `Ethers.js` providers.
-
-### Running gateways to Ethereum networks:
-
-- Rinkeby: `npm run ethereum:rinkeby`
-- Goerli: `npm run ethereum:goerli`
-- Kovan: `npm run ethereum:kovan`
-- Ropsten: `npm run ethereum:ropsten`
-- Mainnet: `npm run ethereum:mainnet`
-
-### Running gateways to BOBA Layer-2 networks:
-
-- Rinkeby: `npm run boba:rinkeby`
-- Mainnet: `npm run boba:mainnet`
-
-### Running gateways to CELO networks:
-
-- Alfajores: `npm run celo:alfajores`
-- Mainnet: `npm run celo:mainnet`
-
-### Running gateways to Conflux networks:
-
-- Testnet: `npm run conflux:testnet`
-- Mainnet: `npm run conflux:mainnet`
-
-### Running gateways to HARMONY networks:
-
-- Testnet (Shard #0): `npm run harmony:testnet#0`
-
-### Running gateways to KCC networks:
-
-- Testnet: `npm run kcc:testnet`
-
-### Running gateways to METIS networks:
-
-- Stardust (Rinkeby): `npm run metis:rinkeby`
-
-### Running gateways to POLYGON networks:
-
-- Mumbai (Goerli): `npm run polygon:goerli`
-
-### Running gateways to REEF CHAIN networks:
-
-- Testnet: `npm run reef:testnet`
-
-## How to create a server for any other provider
-
-To integrate with a different provider, you can create your own script that creates the provider and then build a server around it. Please, have a look to provided examples in `src/bin/**`.
+🤝 Contributing
+PRs are welcome! If you'd like to add new features or extend support to more networks, feel free to open an issue or submit a pull request.
