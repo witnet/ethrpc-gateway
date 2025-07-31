@@ -2,7 +2,10 @@
   "name": "ethrpc-gateway",
   "version": "2.2.1",
   "description": "A Web3 provider that handles accounts on its own but delegates chain queries to a 3rd party service",
-  "main": "dist/bin/ethrpc.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/witnet/ethrpc-gateway"
+  },
   "files": [
     "dist/**",
     "package.json",
@@ -17,6 +20,7 @@
     "ethrpc-reef": "dist/bin/reef/index.js",
     "ethrpc-zksync": "dist/bin/ethers/zksync.js"
   },
+  "main": "dist/bin/ethrpc.js",
   "scripts": {
     "ci": "yarn build",
     "lint": "prettier-standard --format",
@@ -88,10 +92,6 @@
     "worldchain:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT_FACTOR=1.5 ETHRPC_ETHERS_GAS_LIMIT=10000000 ETHRPC_ETHERS_GAS_PRICE=25000000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.1 ETHRPC_ETHERS_MOCK_FILTERS=true node dist/bin/ethers https://worldchain-mainnet.g.alchemy.com/public 9501",
     "worldchain:sepolia": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT_FACTOR=1.5 ETHRPC_ETHERS_GAS_LIMIT=10000000 ETHRPC_ETHERS_GAS_PRICE=25000000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.1 ETHRPC_ETHERS_MOCK_FILTERS=true node dist/bin/ethers https://worldchain-sepolia.g.alchemy.com/public 8501",
     "zksync:sepolia": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_LOG_DEVEL=debug ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_MOCK_FILTERS=true node dist/bin/ethers/zksync https://sepolia.era.zksync.dev 8499"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/witnet/web3-jsonrpc-gateway.git"
   },
   "keywords": [
     "ethereum",
