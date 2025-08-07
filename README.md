@@ -152,7 +152,9 @@ ethrpc ethereum:mainnet
 
 ## 🔒 Security Notice
 
-- This tool does read private keys from system environment variables, but not doest it read nor store them on disk. Private keys are used only in memory to sign transactions. You must set either the ETHRPC_PRIVATE_KEYS or the ETHRPC_SEED_PHRASE environment variables, or provide your private keys via a secure method during development.
+- This tool does read private keys from system environment variables, but not does it read nor store them on disk. 
+- Private keys are used only in memory to sign transactions. 
+- You must set either the ETHRPC_PRIVATE_KEYS or the ETHRPC_SEED_PHRASE environment variables, or provide your private keys via a secure method during development.
 
 > ***Warning**: Never expose private keys in production environments. This tool is meant for development or testing use.*
 

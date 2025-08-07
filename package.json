@@ -1,6 +1,6 @@
 {
   "name": "ethrpc-gateway",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "A Web3 provider that handles accounts on its own but delegates chain queries to a 3rd party service",
   "repository": {
     "type": "git",
@@ -109,6 +109,7 @@
   "homepage": "https://github.com/witnet/web3-jsonrpc-gateway#readme",
   "devDependencies": {
     "@ksmithut/prettier-standard": "^0.2.0",
+    "@reef-defi/evm-provider": "^1.0.11",
     "@types/cors": "^2.8.10",
     "@types/express": "^4.17.11",
     "@types/node": "^22.10.2",
@@ -117,7 +118,6 @@
     "yarn": "^2.4.3"
   },
   "dependencies": {
-    "@reef-defi/evm-provider": "^1.0.11",
     "axios": "^1.6.8",
     "cors": "2.8.5",
     "cross-env": "^7.0.3",
