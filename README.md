@@ -13,7 +13,7 @@ The ETH/RPC Gateway launcher CLI allows you to:
 - ⚙️ Use preconfigured endpoints or provide your own.
 - 📊 Inspect basic chain info directly from the terminal.
 - ✍️ **Sign transactions** with private keys from your local environment.
-- 🔄 Support for ecosystems where RPC providers do not fully implement the standard Ethereum JSON-RPC protocol (such as *Conflux, Reef, TEN, zkSync*).
+- 🔄 Support for ecosystems where RPC providers do not fully implement the standard Ethereum JSON-RPC protocol (such as *Conflux, Reef, TEN and zkSync*).
 
 This makes the gateway a flexible and pretty convenient tool, even for non-standard Ethereum-compatible chains and environments.
 
@@ -65,12 +65,12 @@ ethrpc conflux:core:testnet
 - Launch a gateway with the specified network and remote provider (e.g. Ethereum Mainnet):
 ```bash
 export ETHRPC_SEED_PHRASE="your seed phrase here"
-export ETHRPC_PROVIDER_URL=https://https://mainnet.infura.io/v3/you_infura_key_here
+export ETHRPC_PROVIDER_URL=https://mainnet.infura.io/v3/you_infura_key_here
 ethrpc ethereum:mainnet
 ```
 
 ## 🌍 Supported Chains
-### Testnets
+### Testnets (36)
 | Ecosystem | Network Name           | Default Port | Chain Id |
 | :-------- | :--------------------- | :----------: | -------: |
 | Arbitrum  | arbitrum:sepolia       | 8517 | 421614
@@ -110,7 +110,7 @@ ethrpc ethereum:mainnet
 | World     | worldchain:sepolia     | 8501 | 4801
 | ZkSync    | zksync:sepolia         | 8499 | 300
 
-### Mainnets
+### Mainnets (28)
 | Ecosystem | Network Name           | Default Port | Chain Id |
 | :-------- | :--------------------- | :----------: | -------: |
 | Arbitrum  | arbitrum:mainnet       | 9517 | 42161
