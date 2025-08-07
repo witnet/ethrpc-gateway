@@ -13,7 +13,7 @@ The ETH/RPC Gateway launcher CLI allows you to:
 - ⚙️ Use preconfigured endpoints or provide your own.
 - 📊 Inspect basic chain info directly from the terminal.
 - ✍️ **Sign transactions** with private keys from your local environment.
-- 🔄 Support for ecosystems where RPC providers do not fully implement the standard Ethereum JSON-RPC protocol (such as *Conflux, Reef, TEN and zkSync*).
+- 🔄 Support for ecosystems where RPC providers do not comply with the standard Ethereum JSON-RPC protocol, such as: **Conflux Core**, **Reef**, **TEN** and **zkSync**.
 
 This makes the gateway a flexible and pretty convenient tool, even for non-standard Ethereum-compatible chains and environments.
 
@@ -142,7 +142,7 @@ ethrpc ethereum:mainnet
 | Ultron    | ultron:mainnet         | 9516 | 1231
 | World     | worldchain:mainnet     | 9501 | 480
 
-🧱 Built With
+## 🧱 Built With
 - Node.js
 - Axios
 - Ethers v5
@@ -150,14 +150,14 @@ ethrpc ethereum:mainnet
 - zksync-ethers
 - @reef-defi/evm-provider
 
-🔒 Security Notice
+## 🔒 Security Notice
 
 - This tool does read private keys from system environment variables, but not doest it read nor store them on disk. Private keys are used only in memory to sign transactions. You must set either the ETHRPC_PRIVATE_KEYS or the ETHRPC_SEED_PHRASE environment variables, or provide your private keys via a secure method during development.
 
 > ***Warning**: Never expose private keys in production environments. This tool is meant for development or testing use.*
 
-📜 License
+## 📜 License
 MIT © 2025 — Maintained by the [Witnet Project](https://github.com/witnet).
 
-🤝 Contributing
+## 🤝 Contributing
 PRs are welcome! If you'd like to add new features or extend support to more networks, feel free to open an issue or submit a pull request.
