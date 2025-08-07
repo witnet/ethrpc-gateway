@@ -53,8 +53,8 @@ if (process.argv.length >= 3) {
         }
         // invoke subprocess
         execSync(
-          'npx '
-            .concat(cmdline.join(' '), ' ')
+          cmdline.join(' ')
+            .concat(' ')
             .concat(process.argv.slice(3).join(' ')),
           { stdio: 'inherit' }
         )
