@@ -48,14 +48,12 @@ if (process.argv.length >= 3) {
           process.argv.splice(3, 1)
         }
         if (process.env.ETHRPC_PROVIDER_URL || process.argv.length >= 4) {
-          cmdline[cmdline.length - 2] = process.argv[4] || process.env.ETHRPC_PROVIDER_URL
+          cmdline[cmdline.length - 2] = process.argv[3] || process.env.ETHRPC_PROVIDER_URL
           process.argv.splice(3, 1)
         }
         // invoke subprocess
         execSync(
-          cmdline.join(' ')
-            .concat(' ')
-            .concat(process.argv.slice(3).join(' ')),
+          cmdline.join(' '),
           { stdio: 'inherit' }
         )
         process.exit(0)
