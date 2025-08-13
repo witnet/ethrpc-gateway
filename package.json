@@ -1,6 +1,6 @@
 {
   "name": "ethrpc-gateway",
-  "version": "2.2.6",
+  "version": "2.2.8",
   "description": "A Web3 provider that handles accounts on its own but delegates chain queries to a 3rd party service",
   "repository": {
     "type": "git",
@@ -50,7 +50,7 @@
     "elastos:testnet": "cross-env-shell ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_PRICE=175000000000 ETHRPC_ETHERS_GAS_LIMIT=8000000 node dist/bin/ethers https://api-testnet.elastos.io/eth 8513",
     "elastos:mainnet": "cross-env-shell ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_PRICE=50000000000 ETHRPC_ETHERS_GAS_LIMIT=8000000 node dist/bin/ethers https://api.elastos.io/esc 9513",
     "ethereum:goerli": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_GAS_LIMIT=10000000 ETHRPC_ETHERS_GAS_PRICE=100000000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.8 node dist/bin/ethers https://eth-goerli.public.blastapi.io 8545",
-    "ethereum:sepolia": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_GAS_LIMIT=10000000 ETHRPC_ETHERS_GAS_PRICE=150000000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.1 ETHRPC_ETHERS_GAS_LIMIT_FACTOR=1.1 node dist/bin/ethers https://sepolia.drpc.org 8506",
+    "ethereum:sepolia": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_GAS_LIMIT=10000000 ETHRPC_ETHERS_GAS_PRICE=150000000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.1 ETHRPC_ETHERS_GAS_LIMIT_FACTOR=1.1 node dist/bin/ethers https://sepolia.infura.io/v3/3199c9172a13459caa4e25fd30827194 8506",
     "ethereum:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true node dist/bin/ethers https://gateway.tenderly.co/public/mainnet 9545",
     "fuse:testnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true node dist/bin/ethers https://rpc.fusespark.io 8511",
     "gnosis:testnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=false ETHRPC_ETHERS_GAS_PRICE=10000000000 node dist/bin/ethers https://rpc.chiadochain.net 8509",
@@ -62,7 +62,7 @@
     "kaia:testnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_GAS_LIMIT=15000000 ETHRPC_ETHERS_GAS_PRICE=250000000000 ETHRPC_ETHERS_MOCK_FILTERS=true node dist/bin/ethers https://public-en-kairos.node.kaia.io 8527",
     "kaia:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_GAS_LIMIT=15000000 ETHRPC_ETHERS_GAS_PRICE=250000000000 ETHRPC_ETHERS_MOCK_FILTERS=true node dist/bin/ethers https://klaytn.blockpi.network/v1/rpc/public 9527",
     "mantle:sepolia": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT=27013096569 ETHRPC_ETHERS_GAS_LIMIT_FACTOR=1.0 node dist/bin/ethers https://rpc.sepolia.mantle.xyz/ 8508",
-    "mantle:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT=159768000361 ETHRPC_ETHERS_GAS_LIMIT_FACTOR=3.0 node dist/bin/ethers https://rpc.mantle.xyz/ 9508",
+    "mantle:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT=159768000361 ETHRPC_ETHERS_GAS_LIMIT_FACTOR=3.0 node dist/bin/ethers https://rpc.mantle.xyz/ 9508",
     "meter:testnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_GAS_PRICE=5000000000000 ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT=10000000 node dist/bin/ethers https://rpctest.meter.io 8523",
     "meter:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_GAS_PRICE=5000000000000 ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT=10000000 node dist/bin/ethers https://rpc.meter.io 9523",
     "metis:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT=50000000 node dist/bin/ethers https://metis-andromeda.gateway.tenderly.co 7536",
@@ -72,7 +72,7 @@
     "moonbeam:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_PRICE=200000000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.2 ETHRPC_ETHERS_GAS_LIMIT=14999999 ETHRPC_ETHERS_MOCK_FILTERS=true node dist/bin/ethers https://rpc.api.moonbeam.network 9531",
     "okx:oktchain:testnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_GAS_LIMIT=10000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.1 node dist/bin/ethers https://exchaintestrpc.okex.org 8528",
     "okx:xlayer:sepolia": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT=10000000 ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_GAS_PRICE=484160000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.25 node dist/bin/ethers https://xlayertestrpc.okx.com 8505",
-    "optimism:sepolia": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT_FACTOR=1.5 ETHRPC_ETHERS_GAS_LIMIT=10000000 ETHRPC_ETHERS_GAS_PRICE=25000000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.1 ETHRPC_ETHERS_MOCK_FILTERS=true node dist/bin/ethers https://optimism-sepolia.infura.io/v3/3199c9172a13459caa4e25fd30827194 8503",
+    "optimism:sepolia": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true EHTRPC_ETHERS_FORCE_EIP_1559=false ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT_FACTOR=1.5 ETHRPC_ETHERS_GAS_LIMIT=10000000 ETHRPC_ETHERS_GAS_PRICE=25000000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.1 ETHRPC_ETHERS_MOCK_FILTERS=true node dist/bin/ethers https://optimism-sepolia.infura.io/v3/3199c9172a13459caa4e25fd30827194 8503",
     "optimism:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT_FACTOR=1.1 ETHRPC_ETHERS_MOCK_FILTERS=true node dist/bin/ethers https://mainnet.optimism.io 9520",
     "polygon:amoy": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_PRICE=1000000000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.1 ETHRPC_ETHERS_GAS_LIMIT=25000000 ETHRPC_ETHERS_MOCK_FILTERS=true node dist/bin/ethers https://polygon-amoy.public.blastapi.io 8535",
     "polygon:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_PRICE=500000000000 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.1 ETHRPC_ETHERS_GAS_LIMIT=25000000 node dist/bin/ethers https://1rpc.io/matic 9535",
@@ -110,26 +110,31 @@
   "devDependencies": {
     "@ksmithut/prettier-standard": "^0.2.0",
     "@reef-defi/evm-provider": "^1.0.11",
-    "@types/cors": "^2.8.10",
-    "@types/express": "^4.17.11",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/node": "^22.10.2",
-    "body-parser": "2.0.2",
+    "body-parser": "^2.2.0",
     "typescript": "^5.4.5",
     "yarn": "^2.4.3"
   },
   "dependencies": {
-    "axios": "^1.6.8",
-    "cors": "2.8.5",
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
     "cross-env": "^7.0.3",
-    "dotenv": "^16.4.5",
-    "ethers": "^5.2.0",
-    "express": "4.21.0",
-    "graphql": "^16.8.1",
-    "graphql-request": "^6.1.0",
-    "js-conflux-sdk": "^2.3.0",
-    "json-rpc-2.0": "~1.7.0",
+    "dotenv": "^16.6.1",
+    "ethers": "^5.8.0",
+    "express": "^5.1.0",
+    "graphql": "^16.11.0",
+    "graphql-request": "^7.2.0",
+    "js-conflux-sdk": "^2.5.0",
+    "json-rpc-2.0": "^1.7.1",
     "winston": "^3.17.0",
     "zksync-ethers": "^5.10.0"
+  },
+  "overrides": {
+    "zksync-ethers": {
+      "@ethersproject/abi@npm": "^5.8.0"
+    }
   },
   "packageManager": "yarn@4.5.3"
 }
