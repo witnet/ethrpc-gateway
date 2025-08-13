@@ -57,7 +57,7 @@ export class WalletMiddlewareServer {
     this.expressServer.use(express.json())
 
     this.expressServer.post(
-      '*',
+      '/{*any}',
       async (req: express.Request, res: express.Response) => {
         const request = req.body
 

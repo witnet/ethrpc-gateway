@@ -90,7 +90,7 @@ class WalletMiddlewareServer {
     this.expressServer.use(express.json())
 
     this.expressServer.post(
-      '*',
+      '/{*any}',
       async (req: express.Request, res: express.Response) => {
         const body = req.body
         const socket = {
@@ -101,7 +101,7 @@ class WalletMiddlewareServer {
         }
 
         const requests = Array.isArray(body) ? [ ...body ] : [ body ]
-        await Promise.all(requests.map(async request => {
+        Promise.all(requests.map(async request => {
           logger.log({
             level: 'info',
             socket,

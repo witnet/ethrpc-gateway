@@ -178,7 +178,7 @@ export class WalletWrapper {
   ): Promise<any> {
     const tx = await this.composeTransaction(socket, params)
     if (!tx.from) {
-      const accounts: string[] = await this.getAccounts()
+      const accounts: string[] = this.getAccounts()
       tx.from = accounts[0]
     }
     const gas = await this.provider.estimateGas(tx)
