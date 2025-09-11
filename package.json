@@ -1,6 +1,6 @@
 {
   "name": "ethrpc-gateway",
-  "version": "2.2.8",
+  "version": "2.2.9",
   "description": "A Web3 provider that handles accounts on its own but delegates chain queries to a 3rd party service",
   "repository": {
     "type": "git",
@@ -130,11 +130,6 @@
     "json-rpc-2.0": "^1.7.1",
     "winston": "^3.17.0",
     "zksync-ethers": "^5.10.0"
-  },
-  "overrides": {
-    "zksync-ethers": {
-      "@ethersproject/abi@npm": "^5.8.0"
-    }
   },
   "packageManager": "yarn@4.5.3"
 }
