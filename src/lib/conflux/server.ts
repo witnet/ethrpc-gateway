@@ -42,7 +42,7 @@ export class WalletMiddlewareServer {
   rpcMethodHandlers: { [K: string]: any }
   rpcParamsHandlers: { [K: string]: any }
 
-  constructor (
+  constructor(
     url: string,
     networkId: number,
     privateKeys: string[],
@@ -89,7 +89,7 @@ export class WalletMiddlewareServer {
       eth_sign: this.wrapper.processEthSignMessage,
       eth_syncing: this.wrapper.getSyncingStatus,
       eth_uninstallFilter: this.wrapper.uninstallEthFilter,
-      net_version: this.wrapper.getNetworkId
+      net_version: this.wrapper.getNetworkId,
     }
 
     traceKeyValue('Conflux provider', [
@@ -111,154 +111,163 @@ export class WalletMiddlewareServer {
    * Initializes the Express server, configures CORS, and passes requests back and forth between the Express server and
    * the `JsonRpcEngine`.
    */
-  initialize () {
+  initialize() {
     this.expressServer.use(cors())
     this.expressServer.use(express.json())
 
     this.expressServer.post(
       '/{*any}',
       async (req: express.Request, res: express.Response) => {
-        const request = req.body
-
+        const body = req.body
         const socket: SocketParams = {
           clientAddr: req.connection.remoteAddress || 'unknownAddr',
           clientPort: req.connection.remotePort || 0,
-          clientId: request.id % 10000,
+          clientId: body.id % 10000,
           serverId:
             parseInt('0x' + this.wrapper.conflux.provider.requestId()) % 10000
         }
 
-        let method = request.method
+        const requests = Array.isArray(body) ? [...body] : [body]
 
-        if (method in this.dictionaryEthCfx) {
-          request.method = this.dictionaryEthCfx[request.method]
-          logger.log({
-            level: 'info',
-            socket,
-            message: `>> ${method} >> ${request.method}`
-          })
-        } else {
-          logger.log({ level: 'info', socket, message: `>> ${method}` })
-        }
-        if (request.params && request.params.length > 0) {
-          logger.log({
-            level: 'debug',
-            socket,
-            message: `> ${JSON.stringify(request.params)}`
-          })
-        }
+        Promise.all(requests.map(async request => {
+          let method = request.method
 
-        const header = {
-          jsonrpc: request.jsonrpc,
-          id: request.id
-        }
-
-        let response: {
-          id: number
-          jsonrpc: string
-          result?: string
-          error?: string
-        }
-        let result
-
-        try {
-          if (method in this.rpcParamsHandlers) {
-            request.params = await this.rpcParamsHandlers[method].bind(this)(
-              request.params,
-              socket
-            )
+          if (method in this.dictionaryEthCfx) {
+            request.method = this.dictionaryEthCfx[request.method]
+            logger.log({
+              level: 'info',
+              socket,
+              message: `>> ${method} >> ${request.method}`
+            })
+          } else {
+            logger.log({ level: 'info', socket, message: `>> ${method}` })
+          }
+          if (request.params && request.params.length > 0) {
+            logger.log({
+              level: 'debug',
+              socket,
+              message: `> ${JSON.stringify(request.params)}`
+            })
           }
 
-          if (request.method in this.rpcMethodHandlers) {
-            result = await this.rpcMethodHandlers[request.method].bind(
-              this.wrapper
-            )(...(request.params || []), socket)
-          } else {
-            if (request.method.startsWith('eth_')) {
-              const reason = `Unhandled method '${request.method}'`
-              throw {
-                reason,
+          const header = {
+            jsonrpc: request.jsonrpc,
+            id: request.id
+          }
+
+          let response: {
+            id: number
+            jsonrpc: string
+            result?: string
+            error?: string
+          }
+          let result
+
+          try {
+            if (method in this.rpcParamsHandlers) {
+              request.params = await this.rpcParamsHandlers[method].bind(this)(
+                request.params,
+                socket
+              )
+            }
+
+            if (request.method in this.rpcMethodHandlers) {
+              result = await this.rpcMethodHandlers[request.method].bind(
+                this.wrapper
+              )(...(request.params || []), socket)
+            } else {
+              if (request.method.startsWith('eth_')) {
+                const reason = `Unhandled method '${request.method}'`
+                throw {
+                  reason,
+                  body: {
+                    error: {
+                      code: -32601,
+                      message: reason
+                    }
+                  }
+                }
+              }
+              result = await this.wrapper.send(request.method, request.params)
+            }
+
+            response = { ...header, result }
+          } catch (exception: any) {
+            if (!exception.code) {
+              // if no error code is specified,
+              //   assume the Conflux provider is actually reporting an execution error:
+              exception = {
+                reason: exception.toString(),
                 body: {
                   error: {
-                    code: -32601,
-                    message: reason
+                    code: -32015,
+                    message: exception.data
+                      ? 'Execution error'
+                      : JSON.stringify(exception),
+                    data: exception.data
                   }
                 }
               }
             }
-            result = await this.wrapper.send(request.method, request.params)
-          }
-
-          response = { ...header, result }
-        } catch (exception: any) {
-          if (!exception.code) {
-            // if no error code is specified,
-            //   assume the Conflux provider is actually reporting an execution error:
-            exception = {
-              reason: exception.toString(),
-              body: {
-                error: {
-                  code: -32015,
-                  message: exception.data
-                    ? 'Execution error'
-                    : JSON.stringify(exception),
-                  data: exception.data
-                }
+            const message =
+              exception.reason ||
+              (exception.error && exception.error.reason) ||
+              exception ||
+              'null exception'
+            let body =
+              exception.body ||
+              (exception.error && exception.error.body
+                ? exception.error.body
+                : {
+                  error: {
+                    code: exception.code || -32099,
+                    message: `"${message}"`,
+                    data: exception.data
+                  }
+                })
+            body = typeof body !== 'string' ? JSON.stringify(body) : body
+            try {
+              response = { ...header, error: JSON.parse(body).error }
+            } catch (e) {
+              logger.log({
+                level: 'error',
+                socket,
+                message: `<= Invalid JSON response: "${body}"`
+              })
+              response = {
+                ...header,
+                error: `{ "code": -32700, "message": "Invalid JSON response" }`
               }
             }
           }
-          const message =
-            exception.reason ||
-            (exception.error && exception.error.reason) ||
-            exception ||
-            'null exception'
-          let body =
-            exception.body ||
-            (exception.error && exception.error.body
-              ? exception.error.body
-              : {
-                error: {
-                  code: exception.code || -32099,
-                  message: `"${message}"`,
-                  data: exception.data
-                }
-              })
-          body = typeof body !== 'string' ? JSON.stringify(body) : body
-          try {
-            response = { ...header, error: JSON.parse(body).error }
-          } catch (e) {
+          if (response.error) {
             logger.log({
-              level: 'error',
+              level: 'warn',
               socket,
-              message: `<= Invalid JSON response: "${body}"`
+              message: `<= Error: ${JSON.stringify(response.error)}`
             })
-            response = {
-              ...header,
-              error: `{ "code": -32700, "message": "Invalid JSON response" }`
+          } else {
+            if (
+              method.startsWith('eth_') &&
+              result &&
+              typeof result === 'object'
+            ) {
+              result = this.translateCfxResponseObject(result, socket)
             }
+            logger.log({
+              level: 'http',
+              socket,
+              message: `<< ${JSON.stringify(result)}`
+            })
           }
-        }
-        if (response.error) {
-          logger.log({
-            level: 'warn',
-            socket,
-            message: `<= Error: ${JSON.stringify(response.error)}`
-          })
-        } else {
-          if (
-            method.startsWith('eth_') &&
-            result &&
-            typeof result === 'object'
-          ) {
-            result = this.translateCfxResponseObject(result, socket)
+          return response
+        })).then((responses: any[]) => {
+          if (responses.length === 1) {
+            res.status(200).json(...responses)
+          } else {
+            res.status(200).json(responses)
           }
-          logger.log({
-            level: 'http',
-            socket,
-            message: `<< ${JSON.stringify(result)}`
-          })
-        }
-        res.status(200).json(response)
+        })
       }
     )
     return this
@@ -267,7 +276,7 @@ export class WalletMiddlewareServer {
   /**
    * Tells the Express server to start listening.
    */
-  async listen (port: number, hostname?: string) {
+  async listen(port: number, hostname?: string) {
     let info
     this.wrapper.getAccounts().forEach(async (address, count) => {
       try {
@@ -292,8 +301,7 @@ export class WalletMiddlewareServer {
     })
 
     console.log(
-      `Listening on ${
-        hostname || '0.0.0.0'
+      `Listening on ${hostname || '0.0.0.0'
       }:${port} [${logger.level.toUpperCase()}]`
     )
     console.log()
