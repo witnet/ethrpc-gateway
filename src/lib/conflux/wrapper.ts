@@ -27,7 +27,7 @@ export class WalletWrapper {
     alwaysSynced: boolean,
     conflux: Conflux
   ) {
-    this.networkId = networkId
+    this.networkId = networkId === 1 ? 70 : networkId;
     this.defaultGas = defaultGas
     this.epochLabel = <CONST.EPOCH_NUMBER>epochLabel
     this.estimateGasPrice = estimateGasPrice
@@ -174,7 +174,7 @@ export class WalletWrapper {
   }
 
   async processChainId (): Promise<any> {
-    return '0x' + this.networkId.toString(16)
+    return `0x${this.networkId.toString(16)}`
   }
 
   /**

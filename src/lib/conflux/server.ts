@@ -316,7 +316,7 @@ export class WalletMiddlewareServer {
    *   that come as first parameter in some Eth methods.
    *   E.g.: eth_sign
    */
-  paramsTranslateAddress (params: any[], socket: SocketParams) {
+  paramsTranslateAddress(params: any[], socket: SocketParams) {
     if (params.length > 0) {
       // The ADDRESS is expected as first parameter, and must
       // be converted into proper Conflux alphanumeric format.
@@ -331,7 +331,7 @@ export class WalletMiddlewareServer {
    *   that come as first and second parameter in some Eth methods.
    *   E.g.:
    */
-  paramsTranslateAddrAndTag (params: any[], socket: SocketParams) {
+  paramsTranslateAddrAndTag(params: any[], socket: SocketParams) {
     if (params.length > 0) {
       // The ADDRESS is expected as first parameter, and must
       // be converted into proper Conflux alphanumeric format.
@@ -352,7 +352,7 @@ export class WalletMiddlewareServer {
    *   comes as first parameter in some Eth methods.
    *   E.g.:
    */
-  paramsTranslateTag (params: any[], socket: SocketParams) {
+  paramsTranslateTag(params: any[], socket: SocketParams) {
     if (params.length > 0) {
       // TAG as first parameter may be optional in some cases:
       params[0] = this.translateTag(params[0])
@@ -366,7 +366,7 @@ export class WalletMiddlewareServer {
    *   parameters in some Eth methods.
    *   E.g.:
    */
-  paramsTranslateTxAndTag (params: any[], socket: SocketParams) {
+  paramsTranslateTxAndTag(params: any[], socket: SocketParams) {
     if (params.length > 0) {
       if (params[0] && typeof params[0] === 'object') {
         // TRANSACTION parameter must come as an Object:
@@ -384,7 +384,7 @@ export class WalletMiddlewareServer {
   /**
    * Verbosely log incoming parameters.
    */
-  traceParams (params: any[], socket: SocketParams) {
+  traceParams(params: any[], socket: SocketParams) {
     params.forEach((value, index) => {
       logger.verbose({
         socket,
@@ -398,9 +398,9 @@ export class WalletMiddlewareServer {
    * Lambda function to perform actual translation of Eth addresses to Conflux alphanumeric format.
    * See: https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-37.md
    */
-  translateEthAddress (address: string) {
+  translateEthAddress(address: string) {
     try {
-      return confluxFormat.address(address, this.wrapper.networkId)
+      return confluxFormat.address(address, this.wrapper.networkId === 70 ? 1 : this.wrapper.networkId)
     } catch (e) {
       const reason = `Unable to translate Eth address '${address}'`
       throw {
@@ -419,7 +419,7 @@ export class WalletMiddlewareServer {
    * Lambda function to perform actual translation of TAG parameter,
    *   from Eth to Conflux.
    */
-  translateTag (tag: string) {
+  translateTag(tag: string) {
     switch (tag) {
       case 'latest':
         return this.wrapper.epochLabel
@@ -434,7 +434,7 @@ export class WalletMiddlewareServer {
    * Translate to Conflux the values of `from` and `tx` fields
    *   within passed Transaction object.
    */
-  translateEthAddressesInTransaction (tx: Transaction) {
+  translateEthAddressesInTransaction(tx: Transaction) {
     if (tx.from) tx.from = this.translateEthAddress(tx.from)
     if (tx.to) tx.to = this.translateEthAddress(tx.to)
     return tx
@@ -443,7 +443,7 @@ export class WalletMiddlewareServer {
   /**
    * Recursively mutate Conflux response object as to make it readable by Eth clients.
    */
-  translateCfxResponseObject (obj: any, socket: SocketParams) {
+  translateCfxResponseObject(obj: any, socket: SocketParams) {
     const keys = Object.keys(obj)
     keys.forEach(key => {
       let value = obj[key]
