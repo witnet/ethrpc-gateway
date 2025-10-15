@@ -1,6 +1,6 @@
 {
   "name": "ethrpc-gateway",
-  "version": "2.2.10",
+  "version": "2.2.11",
   "description": "A Web3 provider that handles accounts on its own but delegates chain queries to a 3rd party service",
   "repository": {
     "type": "git",
@@ -37,7 +37,7 @@
     "boba:eth:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT_FACTOR=1.2 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.2 node dist/bin/ethers https://mainnet.boba.network 9539",
     "boba:eth:goerli": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT_FACTOR=1.1 ETHRPC_ETHERS_GAS_LIMIT=10000000 node dist/bin/ethers https://goerli.boba.network 8515",
     "boba:moonbeam:bobabase": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_PRICE=true ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_LIMIT_FACTOR=1.0 node dist/bin/ethers https://bobabase.boba.network 8518",
-    "celo:alfajores": "cross-env-shell ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.1 ETHRPC_ETHERS_GAS_PRICE=100000000000 ETHRPC_ETHERS_GAS_LIMIT=15000000 node dist/bin/ethers https://alfajores-forno.celo-testnet.org 8538",
+    "celo:sepolia": "cross-env-shell ETHRPC_ETHERS_FORCE_EIP_155=true ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_ESTIMATE_GAS_LIMIT=true ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.1 ETHRPC_ETHERS_GAS_PRICE=100000000000 ETHRPC_ETHERS_GAS_LIMIT=15000000 node dist/bin/ethers https://forno.celo-sepolia.celo-testnet.org 8538",
     "celo:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=0 ETHRPC_ETHERS_GAS_LIMIT_FACTOR=3 ETHRPC_ETHERS_GAS_PRICE_FACTOR=1.3 ETHRPC_ETHERS_GAS_PRICE=100000000000 node dist/bin/ethers https://forno.celo.org 9538",
     "conflux:core:testnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=16 ETHRPC_CONFLUX_DEFAULT_EPOCH_LABEL=\"latest_state\" ETHRPC_CONFLUX_ESTIMATE_GAS_PRICE=false ETHRPC_CONFLUX_GAS_PRICE=10000000000 node dist/bin/conflux https://test.confluxrpc.org 1 8540",
     "conflux:core:mainnet": "cross-env-shell ETHRPC_CALL_INTERLEAVE_BLOCKS=4 ETHRPC_CONFLUX_DEFAULT_EPOCH_LABEL=\"latest_state\" CETHRPC_CONFLUX_ESTIMATE_GAS_PRICE=true ETHRPC_CONFLUX_GAS_PRICE=30000000000 node dist/bin/conflux https://main.confluxrpc.com 1029 9540",
