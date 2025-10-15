@@ -78,7 +78,7 @@ ethrpc ethereum:mainnet
 | BASE      | base:sepolia           | 8502 | 84532
 | BOBA      | boba:bnb:testnet       | 8510 | 9728
 |           | boba:eth:goerli        | 8515 | 2888
-| CELO      | celo:alfajores         | 8538 | 44787
+| CELO      | celo:sepolia           | 8538 | 11142220
 | Conflux   | conflux:core:testnet   | 8540 | 1
 |           | conflux:espace:testnet | 8529 | 71
 | Cronos    | cronos:testnet         | 8530 | 338
