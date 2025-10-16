@@ -68,56 +68,18 @@ class TenWalletMiddlewareServer extends WalletMiddlewareServer {
         `${this.providerEndpoint}/?token=${this.encryptionToken}`
       )
       await this.wrapper.provider.ready
+      let { data } = await axios.post(`${this.providerEndpoint}/getmessage/`, {
+        encryptionToken: this.encryptionToken, 
+        formats: ['EIP712']
+      }, {
+        headers: { "Content-Type": "application/json" },
+      })
+      const { message } = data
       traceKeyValue('Provider', [
         ['Endpoint', this.providerEndpoint],
-        ['Encryption', this.encryptionToken],
-        ['Chain id', this.wrapper.provider.network.chainId]
+        ['Encr. token', this.encryptionToken],
+        ['Network id', this.wrapper.provider.network.chainId]
       ])
-      // For each seed phrase wallet address, connect to the provider and check whether it's already registered:
-      if (this.seedPhrase) {
-        for (let ix = 0; ix < this.seedPhraseWallets; ix++) {
-          const wallet = Wallet.fromMnemonic(
-            this.seedPhrase,
-            `m/44'/60'/0'/0/${ix}`
-          ).connect(this.wrapper.provider)
-          this.wrapper.wallets.push(wallet)
-          const address = await wallet.getAddress()
-          const response = await axios.get(
-            `${this.providerEndpoint}/query/address?token=${this.encryptionToken}&a=${address}`
-          )
-          if (!response.data.status) {
-            const signature = await wallet._signTypedData(
-              {
-                name: 'Ten',
-                version: '1.0',
-                chainId: this.wrapper.provider.network.chainId
-              },
-              {
-                Authentication: [{ name: 'Encryption Token', type: 'address' }]
-              },
-              {
-                'Encryption Token': this.encryptionToken
-              }
-            )
-            const response = await axios.post(
-              `${this.providerEndpoint}/authenticate/?token=${this.encryptionToken}`,
-              `{ "address": "${address}", "signature": "${signature}" }`
-            )
-            if (response.data !== 'success') {
-              console.error(
-                `Unable to authenticate address ${address} into endpoint ${this.providerEndpoint}:`
-              )
-              console.error('Error:', response.data)
-            }
-          }
-          traceKeyValue(`Signer #${ix}`, [
-            ['Address', address],
-            ['Balance', await wallet.getBalance()],
-            ['Nonce  ', await wallet.getTransactionCount()]
-          ])
-        }
-        delete this.seedPhrase
-      }
       // For each private key, connect addtional wallet to the provider and check whether it's already registered:
       if (
         this.privateKeys &&
@@ -128,33 +90,16 @@ class TenWalletMiddlewareServer extends WalletMiddlewareServer {
           const wallet = new Wallet(this.privateKeys[ix], this.wrapper.provider)
           this.wrapper.wallets.push(wallet)
           const address = await wallet.getAddress()
-          const response = await axios.get(
-            `${this.providerEndpoint}/query/address?token=${this.encryptionToken}&a=${address}`
+          const signature = await wallet._signTypedData(message.domain, message.types, message.message)
+          const response = await axios.post(
+            `${this.providerEndpoint}/authenticate/?token=${this.encryptionToken}`,
+            `{ "address": "${address}", "signature": "${signature}" }`
           )
-          if (!response.data.status) {
-            const signature = await wallet._signTypedData(
-              {
-                name: 'Ten',
-                version: '1.0',
-                chainId: this.wrapper.provider.network.chainId
-              },
-              {
-                Authentication: [{ name: 'Encryption Token', type: 'address' }]
-              },
-              {
-                'Encryption Token': this.encryptionToken
-              }
+          if (response.data !== 'success') {
+            console.error(
+              `Unable to authenticate address ${address} into endpoint ${this.providerEndpoint}:`
             )
-            const response = await axios.post(
-              `${this.providerEndpoint}/authenticate/?token=${this.encryptionToken}`,
-              `{ "address": "${address}", "signature": "${signature}" }`
-            )
-            if (response.data !== 'success') {
-              console.error(
-                `Unable to authenticate address ${address} into endpoint ${this.providerEndpoint}:`
-              )
-              console.error('Error:', response.data)
-            }
+            console.error('Error:', response.data)
           }
           traceKeyValue(`Signer #${ix}`, [
             ['Address', address],
