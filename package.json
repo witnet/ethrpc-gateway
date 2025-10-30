@@ -112,7 +112,7 @@
     "@reef-defi/evm-provider": "^1.0.11",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
-    "@types/node": "^22.10.2",
+    "@types/node": "^24.9.2",
     "body-parser": "^2.2.0",
     "typescript": "^5.4.5",
     "yarn": "^2.4.3"
@@ -120,8 +120,8 @@
   "dependencies": {
     "axios": "^1.11.0",
     "cors": "^2.8.5",
-    "cross-env": "^7.0.3",
-    "dotenv": "^16.6.1",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.2.3",
     "ethers": "^5.8.0",
     "express": "^5.1.0",
     "graphql": "^16.11.0",
