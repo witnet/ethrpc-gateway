@@ -338,8 +338,7 @@ export class WalletWrapper {
       message: `> Epoch height: ${payload.epochHeight}`
     })
     logger.verbose({ socket, message: `> Chain id: ${payload.chainId}` })
-
-    return this.conflux.sendTransaction(payload)
+    return this.conflux.cfx.sendTransaction(payload)
   }
 
   /**
