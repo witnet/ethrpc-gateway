@@ -250,9 +250,10 @@ class WalletMiddlewareServer {
         await this.wrapper.provider.detectNetwork()
       if (network) {
         traceKeyValue('Network', [
-          ['Network id', network.chainId],
+          ['Provider URL', this.wrapper.provider.connection.url],
+          ['Network id  ', network.chainId],
           ['Network name', network.name],
-          ['ENS address', network.ensAddress]
+          ['ENS address ', network.ensAddress]
         ])
       }
 
