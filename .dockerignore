@@ -1,4 +1,4 @@
 .dockerignore
-.env*
+**/.env*
 docker/
 node_modules/
