@@ -27,7 +27,7 @@ export class WalletWrapper {
     alwaysSynced: boolean,
     conflux: Conflux
   ) {
-    this.networkId = networkId === 1 ? 70 : networkId;
+    this.networkId = networkId
     this.defaultGas = defaultGas
     this.epochLabel = <CONST.EPOCH_NUMBER>epochLabel
     this.estimateGasPrice = estimateGasPrice
@@ -169,12 +169,12 @@ export class WalletWrapper {
   /**
    * Gets network id.
    */
-  async getNetworkId (): Promise<any> {
-    return this.networkId
+  getNetworkId (): number {
+    return this.networkId === 1 ? 70 : this.networkId
   }
 
   async processChainId (): Promise<any> {
-    return `0x${this.networkId.toString(16)}`
+    return `0x${this.getNetworkId().toString(16)}`
   }
 
   /**
@@ -248,7 +248,7 @@ export class WalletWrapper {
     let gasPrice: number | string
     if (this.estimateGasPrice) {
       let gasPriceBI: bigint = BigInt(
-        await (await this.conflux.getGasPrice()).toString(10)
+        (await this.conflux.getGasPrice()).toString(10)
       )
       if (gasPriceBI > BigInt(this.conflux.defaultGasPrice.toString())) {
         let reason = `Estimated gas price exceeds threshold (${gasPriceBI} > ${this.conflux.defaultGasPrice})`
