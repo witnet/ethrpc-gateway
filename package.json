@@ -18,6 +18,7 @@
     "ethrpc-ethers": "dist/bin/ethers/index.js",
     "ethrpc-infura": "dist/bin/ethers/infura.js",
     "ethrpc-reef": "dist/bin/reef/index.js",
+    "ethrpc-ten": "dist/bin/ethers/ten.js",
     "ethrpc-zksync": "dist/bin/ethers/zksync.js"
   },
   "main": "dist/bin/ethrpc.js",
